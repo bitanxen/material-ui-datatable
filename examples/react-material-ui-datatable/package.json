@@ -1,10 +1,8 @@
 {
-  "name": "react-material-ui-datatable",
+  "name": "react-material-ui-datatable-example",
   "version": "1.0.0",
-  "description": "react material ui table example",
+  "description": "",
   "main": "index.js",
-  "author": "Bitan Biswas",
-  "license": "MIT",
   "scripts": {
     "start": "node ../../node_modules/react-scripts/bin/react-scripts.js start",
     "build": "node ../../node_modules/react-scripts/bin/react-scripts.js build",
@@ -12,10 +10,10 @@
     "eject": "node ../../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
-    "@bitanxen/react-datatable": "../../",
-    "react": "../../node_modules/react",
-    "react-dom": "../../node_modules/react-dom",
-    "react-scripts": "../../node_modules/react-scripts"
+    "@bitanxen/react-datatable": "file:../..",
+    "react": "file:../../node_modules/react",
+    "react-dom": "file:../../node_modules/react-dom",
+    "react-scripts": "file:../../node_modules/react-scripts"
   },
   "browserslist": [
     ">0.2%",

@@ -16,14 +16,14 @@
     "prebuild": "rimraf dist",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
-    "dev": "concurrently \" npm run watch \" \" npm run start --prefix examples/react-material-ui-datatable \"  ",
+    "dev": "concurrently \" yarn run watch \" \" yarn --cwd examples/react-material-ui-datatable start \"  ",
     "test": "run-s test:unit test:lint test:build",
     "test:lint": "eslint src/**/*.js",
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test --env=jsdom --coverage --collectCoverageFrom=src/components/**/*.js",
+    "test:watch": "react-scripts test --env=jsdom --coverage --collectCoverageFrom=src/**/*.js",
     "test:build": "run-s build",
     "lint:fix": "prettier-eslint '**/*.js' --write",
-    "prepublish": "npm run build"
+    "prepublish": "yarn run build"
   },
   "husky": {
     "hooks": {
@@ -32,7 +32,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": [
-      "npm run lint:fix"
+      "yarn run lint:fix"
     ]
   },
   "devDependencies": {
@@ -43,11 +43,19 @@
     "@testing-library/react": "^10.4.1",
     "@testing-library/user-event": "^12.0.7",
     "babel-eslint": "^10.0.3",
+    "babel-loader": "8.1.0",
     "babel-plugin-macros": "^2.8.0",
     "babel-plugin-styled-components": "^1.10.7",
     "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
+    "purgecss": "1.4.2",
+    "tailwindcss": "^1.4.6",
     "eslint": "^6.8.0",
+    "@material-ui/core": "4.9.2",
+    "@material-ui/icons": "4.5.1",
+    "clsx": "1.1.0",
+    "lodash": "^4.17.15",
+    "xlsx": "^0.15.1",
     "eslint-config-prettier": "^6.7.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-config-standard-react": "^9.2.0",
@@ -63,11 +71,6 @@
     "prettier": "^2.0.5",
     "prettier-eslint-cli": "^5.0.0",
     "prop-types": "^15.7.2",
-    "@material-ui/core": "4.9.2",
-    "@material-ui/icons": "4.5.1",
-    "clsx": "1.1.0",
-    "lodash": "^4.17.15",
-    "xlsx": "^0.15.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
@@ -79,15 +82,11 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
     "rollup-plugin-terser": "^6.1.0",
-    "rollup-plugin-uglify": "^6.0.4",
-    "styled-components": "^5.1.1"
+    "rollup-plugin-uglify": "^6.0.4"
   },
   "peerDependencies": {
     "react": "^16.13.1",
-    "@material-ui/core": "4.9.2",
-    "@material-ui/icons": "4.5.1",
     "prop-types": "^15.7.2",
-    "styled-components": "^5.1.1",
     "clsx": "1.1.0",
     "lodash": "^4.17.15",
     "xlsx": "^0.15.1"
@@ -97,6 +96,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitanxen/react-datatable"
+    "url": "https://github.com/bitanxen/material-ui-datatable"
   }
 }
