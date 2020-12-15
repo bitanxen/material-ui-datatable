@@ -1,6 +1,6 @@
 {
-  "short_name": "react-ui",
-  "name": "react-ui",
+  "short_name": "react-material-ui-datatable",
+  "name": "react-material-ui-datatable",
   "icons": [{
     "src": "favicon.ico",
     "sizes": "64x64 32x32 24x24 16x16",
