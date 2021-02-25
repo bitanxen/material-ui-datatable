@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState, useRef } from "react";
 import PropTypes from "prop-types";
-import { Paper, Table, Toolbar, Button } from "@material-ui/core";
+import { Paper, Table } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { parse } from "date-fns";
 
@@ -9,7 +9,9 @@ import MaterialTableHead from "./MaterialTableHead";
 import MaterialTableBody from "./MaterialTableBody";
 import MaterialTablePagination from "./MaterialTablePagination";
 import MaterialTableReset from "./MaterialTableReset";
+import MaterialTableActions from "./MaterialTableActions";
 import ApplicationUtils from "../common/ApplicationUtils";
+import useWidth from "../common/useWidth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +48,7 @@ const MaterialTable = (props) => {
   const classes = useStyles();
   const {
     tableName,
+    tableSize,
     loading,
     searchable,
     sortable,
@@ -63,6 +66,8 @@ const MaterialTable = (props) => {
     actions,
   } = props;
 
+  const tableRef = useRef(null);
+  const [width] = useWidth(tableRef);
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [page, setPage] = React.useState(0);
@@ -75,10 +80,25 @@ const MaterialTable = (props) => {
 
   const headCells = sortedCells.filter((cell) => !cell.keyCol);
   const keyCells = sortedCells.filter((cell) => cell.keyCol);
+  const [tableWidth, setTableWidth] = useState(0);
 
   useEffect(() => {
     setAllData(data);
   }, [data]);
+
+  useEffect(() => {
+    if (headCells.length > 0) {
+      const cellsTotalWidth = headCells
+        .map((h) => h.width || 100)
+        .reduce((t, n) => t + n);
+
+      if (cellsTotalWidth < width) {
+        setTableWidth(width);
+      } else {
+        setTableWidth(cellsTotalWidth);
+      }
+    }
+  }, [headCells, width]);
 
   let keyCol = "";
   if (keyCells.length === 1) {
@@ -323,10 +343,6 @@ const MaterialTable = (props) => {
     setAllData(filteredData);
   }
 
-  const onRequestResize = (colId, e, position) => {
-    console.log(colId, e, position);
-  };
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -344,16 +360,19 @@ const MaterialTable = (props) => {
           addHandler={addHandler}
           editHandler={editHandler}
           deleteHandler={deleteHandler}
-          refreshHanAAAAdler={refreshHandler}
+          refreshHandler={refreshHandler}
           downloadHander={handleDownload}
           resetHander={setOpenResetHandler}
           actions={actions || []}
         />
-        <div className={classes.tableWrapper}>
+        <div className={classes.tableWrapper} ref={tableRef}>
           <Table
-            className={classes.table}
+            style={{
+              width: `${tableWidth}px`,
+              tableLayout: "fixed",
+            }}
             aria-labelledby="tableTitle"
-            size="medium"
+            size={tableSize || "small"}
           >
             <MaterialTableHead
               classes={classes}
@@ -364,7 +383,6 @@ const MaterialTable = (props) => {
               onRequestSort={sortable ? handleSort : undefined}
               rowCount={data === null ? 0 : data.length}
               header={headCells}
-              onRequestResize={onRequestResize}
             />
             <MaterialTableBody
               data={allData}
@@ -379,32 +397,7 @@ const MaterialTable = (props) => {
             />
           </Table>
         </div>
-        {actions &&
-          actions.length > 0 &&
-          actions.filter(
-            (a) => a.position === "both" || a.position === "bottom"
-          ).length > 0 && (
-            <Toolbar className={classes.tableFooter}>
-              <div style={{ marginLeft: "auto" }}>
-                {actions
-                  .filter(
-                    (a) => a.position === "both" || a.position === "bottom"
-                  )
-                  .map((a, index) => (
-                    <Button
-                      key={index}
-                      variant="contained"
-                      size="small"
-                      color="primary"
-                      onClick={a.actionHandler}
-                      style={{ marginRight: "10px" }}
-                    >
-                      {a.actionName}
-                    </Button>
-                  ))}
-              </div>
-            </Toolbar>
-          )}
+        <MaterialTableActions actions={actions} position="bottom" />
         <MaterialTablePagination
           data={allData}
           rowsPerPage={rowsPerPage}
@@ -427,6 +420,7 @@ const MaterialTable = (props) => {
 
 MaterialTable.propTypes = {
   tableName: PropTypes.string.isRequired,
+  tableSize: PropTypes.oneOf(["small", "medium"]),
   loading: PropTypes.bool,
   searchable: PropTypes.bool.isRequired,
   sortable: PropTypes.bool,

@@ -64,9 +64,8 @@ const MaterialTableBody = (props) => {
   const columnStyle = (headCell) => {
     const headCellStyle = {};
 
-    if (headCell.maxWidth) {
-      headCellStyle.maxWidth = headCell.maxWidth;
-      headCellStyle.width = headCell.maxWidth;
+    if (headCell.width) {
+      headCellStyle.width = headCell.width;
       headCellStyle.whiteSpace = "nowrap";
       headCellStyle.overflow = "hidden";
       headCellStyle.textOverflow = "ellipsis";
@@ -108,6 +107,7 @@ const MaterialTableBody = (props) => {
                   onClick={(event) =>
                     onSelect ? onSelect(event, row[keyCol]) : false
                   }
+                  style={{ maxWidth: "60px", width: "60px" }}
                 >
                   <Checkbox
                     checked={isItemSelected}
@@ -119,7 +119,7 @@ const MaterialTableBody = (props) => {
               )}
               {header.map((col, index) => (
                 <TableCell
-                  component="th"
+                  component="td"
                   id={labelId}
                   scope="row"
                   align={col.colType === "numeric" ? "center" : "left"}

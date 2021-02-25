@@ -37,7 +37,7 @@ const App = () => {
       onClickHandler: viewUser,
       display: true,
       fixed: true,
-      maxWidth: "100px",
+      width: 200,
     },
     {
       colId: "age",
@@ -45,7 +45,7 @@ const App = () => {
       colType: "numeric",
       index: 2,
       display: true,
-      maxWidth: "30px",
+      width: 80,
     },
     {
       colId: "enabled",
@@ -54,7 +54,7 @@ const App = () => {
       index: 3,
       keyCol: false,
       display: true,
-      maxWidth: "30px",
+      width: 80,
     },
     {
       colId: "createdOn",
@@ -63,7 +63,7 @@ const App = () => {
       index: 4,
       keyCol: false,
       display: true,
-      maxWidth: "30px",
+      width: 200,
     },
   ];
 
@@ -157,6 +157,7 @@ const App = () => {
   return (
     <MaterialTable
       tableName="Test Table"
+      tableSize="small"
       loading={loading}
       searchable
       sortable

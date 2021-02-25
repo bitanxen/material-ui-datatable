@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 import {
+  useMediaQuery,
+  useTheme,
   Toolbar,
   Typography,
   Tooltip,
@@ -57,10 +59,10 @@ const useToolbarStyles = makeStyles((theme) => ({
     width: "100%",
   },
   actions: {
-    color: theme.palette.text.secondary,
+    color: theme.palette.secondary[500],
   },
   active: {
-    color: theme.palette.error[700],
+    color: theme.palette.primary[700],
   },
   title: {
     flex: "0 0 auto",
@@ -96,6 +98,10 @@ const MaterialTableToolbar = (props) => {
     resetHander,
     actions,
   } = props;
+  const theme = useTheme();
+  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const upMD = useMediaQuery(theme.breakpoints.up("md"));
+  const upLG = useMediaQuery(theme.breakpoints.up("lg"));
   const [searchEnable, setSearchEnable] = useState(false);
   const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
   const [downloadDialogOpen, setDownloadDialogOpen] = React.useState(false);
@@ -169,7 +175,9 @@ const MaterialTableToolbar = (props) => {
             </ClickAwayListener>
           ) : numSelected > 0 ? (
             <Typography color="inherit" variant="subtitle1">
-              {numSelected} selected
+              <span>
+                {tableName}: {numSelected} selected
+              </span>
             </Typography>
           ) : (
             <Typography variant="subtitle1">
@@ -179,176 +187,197 @@ const MaterialTableToolbar = (props) => {
           )}
         </div>
         <div className={classes.spacer} />
-        <div className={classes.actions}>
-          {addHandler && (
-            <Tooltip
-              title="Add"
-              onClick={() => {
-                addHandler();
-              }}
-            >
-              <IconButton aria-label="add">
-                <Add />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={classes.actions}>
-          {numSelected > 0 && editHandler && (
-            <Tooltip
-              title="Edit"
-              onClick={() => {
-                editHandler(true);
-              }}
-            >
-              <IconButton aria-label="edit">
-                <Edit />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={classes.actions}>
-          {numSelected > 0 && deleteHandler && (
-            <Tooltip
-              title="Delete"
-              onClick={() => {
-                deleteHandler(true);
-              }}
-            >
-              <IconButton aria-label="delete">
-                <Delete />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={classes.actions}>
-          {searchable && (
-            <Tooltip
-              title="Search"
-              onClick={() => {
-                if (searchEnable) {
-                  setSearchTerm("");
-                  searchHandler("", filter);
-                }
-                setSearchEnable(!searchEnable);
-              }}
-            >
-              <IconButton
-                aria-label="search list"
-                className={searchEnable ? classes.active : ""}
+        {upMD && (
+          <div className={classes.actions}>
+            {addHandler && (
+              <Tooltip
+                title="Add"
+                onClick={() => {
+                  addHandler();
+                }}
               >
-                {searchEnable ? <Close /> : <Search />}
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={classes.actions}>
-          {filterable && (
-            <Tooltip title="Filter" onClick={() => setFilterDialogOpen(true)}>
-              <IconButton
-                aria-label="filter"
-                className={filter.length > 0 ? classes.active : ""}
-              >
-                <FilterList />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={(classes.actions, "div-desktop")}>
-          {refreshHandler && (
-            <Tooltip title="Refresh">
-              <IconButton
-                aria-label="refresh"
-                disabled={!refreshEnable}
-                onClick={() => handleRefresh()}
-              >
-                <Refresh />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={(classes.actions, "div-desktop")}>
-          {downloadable && (
-            <Tooltip title="Download">
-              <IconButton
-                aria-label="download"
-                onClick={() => setDownloadDialogOpen(true)}
-              >
-                <CloudDownload />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={(classes.actions, "div-desktop")}>
-          {resetable && (
-            <Tooltip title="Reset">
-              <IconButton aria-label="reset" onClick={() => resetHander(true)}>
-                <SettingsApplications />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
-        <div className={(classes.actions, "div-mobile")}>
-          {(resetable || downloadable || refreshHandler) && (
-            <Tooltip title="More">
-              <React.Fragment>
-                <IconButton
-                  aria-label="more"
-                  aria-controls="long-menu"
-                  aria-haspopup="true"
-                  onClick={handleMoreMenuClick}
-                >
-                  <MoreVertIcon />
+                <IconButton aria-label="add">
+                  <Add />
                 </IconButton>
-                <Menu
-                  id="long-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={open}
-                  onClose={handleMoreMenuClose}
-                  PaperProps={{
-                    style: {
-                      maxHeight: 48 * 4.5,
-                      width: 200,
-                    },
-                  }}
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {upMD && (
+          <div className={classes.actions}>
+            {numSelected > 0 && editHandler && (
+              <Tooltip
+                title="Edit"
+                onClick={() => {
+                  editHandler(true);
+                }}
+              >
+                <IconButton aria-label="edit">
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {upMD && (
+          <div className={classes.actions}>
+            {numSelected > 0 && deleteHandler && (
+              <Tooltip
+                title="Delete"
+                onClick={() => {
+                  deleteHandler(true);
+                }}
+              >
+                <IconButton aria-label="delete">
+                  <Delete />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {upSM && (
+          <div className={classes.actions}>
+            {searchable && (
+              <Tooltip
+                title="Search"
+                onClick={() => {
+                  if (searchEnable) {
+                    setSearchTerm("");
+                    searchHandler("", filter);
+                  }
+                  setSearchEnable(!searchEnable);
+                }}
+              >
+                <IconButton
+                  aria-label="search list"
+                  className={searchEnable ? classes.active : ""}
                 >
-                  {refreshHandler && (
-                    <MenuItem
-                      disabled={!refreshEnable}
-                      onClick={() => {
-                        handleRefresh();
-                        handleMoreMenuClose();
-                      }}
-                    >
-                      Refresh
-                    </MenuItem>
-                  )}
-                  {downloadable && (
-                    <MenuItem
-                      onClick={() => {
-                        setDownloadDialogOpen(true);
-                        handleMoreMenuClose();
-                      }}
-                    >
-                      Download
-                    </MenuItem>
-                  )}
-                  {resetable && (
-                    <MenuItem
-                      onClick={() => {
-                        resetHander(true);
-                        handleMoreMenuClose();
-                      }}
-                    >
-                      Reset
-                    </MenuItem>
-                  )}
-                </Menu>
-              </React.Fragment>
-            </Tooltip>
-          )}
-        </div>
+                  {searchEnable ? <Close /> : <Search />}
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {upSM && (
+          <div className={classes.actions}>
+            {filterable && (
+              <Tooltip title="Filter" onClick={() => setFilterDialogOpen(true)}>
+                <IconButton
+                  aria-label="filter"
+                  className={filter.length > 0 ? classes.active : ""}
+                >
+                  <FilterList />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {upLG && (
+          <div className={classes.actions}>
+            {refreshHandler && (
+              <Tooltip title="Refresh">
+                <IconButton
+                  aria-label="refresh"
+                  disabled={!refreshEnable}
+                  onClick={() => handleRefresh()}
+                >
+                  <Refresh />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {upLG && (
+          <div className={classes.actions}>
+            {downloadable && (
+              <Tooltip title="Download">
+                <IconButton
+                  aria-label="download"
+                  onClick={() => setDownloadDialogOpen(true)}
+                >
+                  <CloudDownload />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {upLG && (
+          <div className={classes.actions}>
+            {resetable && (
+              <Tooltip title="Reset">
+                <IconButton
+                  aria-label="reset"
+                  onClick={() => resetHander(true)}
+                >
+                  <SettingsApplications />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
+        {!upLG && (
+          <div className={(classes.actions, "div-mobile")}>
+            {(resetable || downloadable || refreshHandler) && (
+              <Tooltip title="More">
+                <React.Fragment>
+                  <IconButton
+                    aria-label="more"
+                    aria-controls="long-menu"
+                    aria-haspopup="true"
+                    onClick={handleMoreMenuClick}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="long-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={handleMoreMenuClose}
+                    PaperProps={{
+                      style: {
+                        maxHeight: 48 * 4.5,
+                        width: 200,
+                      },
+                    }}
+                  >
+                    {refreshHandler && (
+                      <MenuItem
+                        disabled={!refreshEnable}
+                        onClick={() => {
+                          handleRefresh();
+                          handleMoreMenuClose();
+                        }}
+                      >
+                        Refresh
+                      </MenuItem>
+                    )}
+                    {downloadable && (
+                      <MenuItem
+                        onClick={() => {
+                          setDownloadDialogOpen(true);
+                          handleMoreMenuClose();
+                        }}
+                      >
+                        Download
+                      </MenuItem>
+                    )}
+                    {resetable && (
+                      <MenuItem
+                        onClick={() => {
+                          resetHander(true);
+                          handleMoreMenuClose();
+                        }}
+                      >
+                        Reset
+                      </MenuItem>
+                    )}
+                  </Menu>
+                </React.Fragment>
+              </Tooltip>
+            )}
+          </div>
+        )}
       </Toolbar>
       {actions &&
         actions.length > 0 &&
